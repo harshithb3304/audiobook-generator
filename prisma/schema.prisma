@@ -1,0 +1,78 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String      @id @db.Uuid
+  email         String      @unique
+  name          String?
+  avatar_url    String?
+  createdAt     DateTime    @default(now()) @db.Timestamptz
+  updatedAt     DateTime    @default(now()) @db.Timestamptz
+  audiobooks    Audiobook[]
+  settings      Settings?
+}
+
+model Audiobook {
+  id          String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title       String
+  description String?
+  duration    Int         @default(0) // Duration in seconds
+  voiceid     String?     // Voice profile used
+  speechrate  Float       @default(1.0) // Playback rate
+  background  String?     // Background ambience
+  status      String      @default("pending") // pending, processing, completed, failed
+  progress    Float       @default(0) // 0-100
+  error       String?     // Error message if failed
+  userid      String      @db.Uuid
+  user        User        @relation(fields: [userid], references: [id], onDelete: Cascade)
+  sourceFile  SourceFile?
+  audioFile   AudioFile?
+  createdAt   DateTime    @default(now()) @db.Timestamptz
+  updatedAt   DateTime    @default(now()) @db.Timestamptz
+}
+
+model SourceFile {
+  id          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String
+  type        String    // pdf, txt, docx, etc.
+  size        Int       // in bytes
+  url         String    // URL to the file in storage
+  pages       Int?      // Number of pages if PDF
+  text        String?   // Extracted text content
+  audiobookid String    @unique @db.Uuid
+  audiobook   Audiobook @relation(fields: [audiobookid], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now()) @db.Timestamptz
+  updatedAt   DateTime  @default(now()) @db.Timestamptz
+}
+
+model AudioFile {
+  id          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name        String
+  type        String    // mp3, wav, etc.
+  size        Int       // in bytes
+  duration    Int       // in seconds
+  url         String    // URL to the file in storage
+  audiobookid String    @unique @db.Uuid
+  audiobook   Audiobook @relation(fields: [audiobookid], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now()) @db.Timestamptz
+  updatedAt   DateTime  @default(now()) @db.Timestamptz
+}
+
+model Settings {
+  id           String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  voiceid      String?  // Default voice for generation
+  playbackrate Float    @default(1.0)
+  theme        String   @default("dark")
+  userid       String   @unique @db.Uuid
+  user         User     @relation(fields: [userid], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now()) @db.Timestamptz
+  updatedAt    DateTime @default(now()) @db.Timestamptz
+}
