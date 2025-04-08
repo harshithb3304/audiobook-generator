@@ -4,7 +4,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Demo
 
-https://github.com/harshithb3304/audiobook-generator/assets/demo.mp4
+You can find the demo video in /assets directory.
+
+https://github.com/harshithb3304/audiobook-generator/tree/main/assets
 
 ## Installation
 
@@ -43,5 +45,3 @@ https://github.com/harshithb3304/audiobook-generator/assets/demo.mp4
 2. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application
 
 3. Start editing the application by modifying files in the `app` directory. The page auto-updates as you edit files.
-
-
