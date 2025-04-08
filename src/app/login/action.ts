@@ -11,8 +11,8 @@ export async function login() {
   const isLocalEnv = process.env.NODE_ENV === "development";
   const baseUrl = isLocalEnv
     ? "http://localhost:3000"
-    : process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
+    : process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "";
 
   const { data, error } = await supabase.auth.signInWithOAuth({
