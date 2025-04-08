@@ -4,9 +4,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Demo
 
-You can find the demo video in /assets directory.
+You can find the demo video in /assets directory or from the Google Drive link below.
 
-https://github.com/harshithb3304/audiobook-generator/tree/main/assets
+https://drive.google.com/file/d/1O3r2YTP_oAN4Bkm7pHmXkPApMHnZLRzZ/view?usp=sharing
 
 ## Installation
 
