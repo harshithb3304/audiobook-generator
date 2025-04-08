@@ -8,17 +8,22 @@ import { createClient } from "@/utils/supabase/server";
 export async function login() {
   const supabase = await createClient();
 
-  const isLocalEnv = process.env.NODE_ENV === "development";
-  const baseUrl = isLocalEnv
-    ? "http://localhost:3000"
-    : process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "";
+  const getURL = () => {
+    let url =
+      process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+      process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
+      "http://localhost:3000/";
+    // Make sure to include `https://` when not localhost.
+    url = url.startsWith("http") ? url : `https://${url}`;
+    // Make sure to include a trailing `/`.
+    url = url.endsWith("/") ? url : `${url}/`;
+    return url;
+  };
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${baseUrl}/auth/callback`,
+      redirectTo: getURL(),
     },
   });
 
